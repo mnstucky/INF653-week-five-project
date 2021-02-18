@@ -1,5 +1,7 @@
 <?php
-require_once('db_connect.php');
+require_once('./model/db_connect.php');
+require('./model/item_db.php');
+require('./model/category_db.php');
 
 if (!isset($categoryId)) {
     $categoryId = filter_input(
@@ -9,26 +11,8 @@ if (!isset($categoryId)) {
     );
 }
 
-if ($categoryId == NULL || $categoryId == FALSE) {
-    $queryAllTodos = 'SELECT * FROM todoitems ORDER BY itemnum';
-    $getTodosStatement = $db->prepare($queryAllTodos);
-    $getTodosStatement->execute();
-    $todos = $getTodosStatement->fetchAll();
-    $getTodosStatement->closeCursor();
-} else {
-    $querySelectTodos = 'SELECT * FROM todoitems WHERE categoryID = :categoryId ORDER BY itemnum';
-    $getTodosStatement = $db->prepare($querySelectTodos);
-    $getTodosStatement->bindValue(':categoryId', $categoryId);
-    $getTodosStatement->execute();
-    $todos = $getTodosStatement->fetchAll();
-    $getTodosStatement->closeCursor();
-}
-
-$queryAllCategories = 'SELECT * FROM categories ORDER BY categoryID';
-$getCategoriesStatement = $db->prepare($queryAllCategories);
-$getCategoriesStatement->execute();
-$allCategories = $getCategoriesStatement->fetchAll();
-$getCategoriesStatement->closeCursor();
+$allCategories = get_categories();
+$todos = get_todos_by_category($categoryId);
 
 ?>
 
@@ -93,16 +77,7 @@ $getCategoriesStatement->closeCursor();
                 <ul class="list-group">
                     <?php foreach ($todos as $todo) {
                         $thisCategoryId = $todo['categoryID'];
-                        $queryCategoryName = 'SELECT categoryName FROM categories WHERE categoryID = :categoryId';
-                        $getCategoryNameStatement = $db->prepare($queryCategoryName);
-                        $getCategoryNameStatement->bindValue(':categoryId', $thisCategoryId);
-                        $getCategoryNameStatement->execute();
-                        $thisCategoryNameArray = $getCategoryNameStatement->fetch();
-                        if ($thisCategoryNameArray === FALSE || $thisCategoryNameArray === NULL) {
-                            $thisCategoryName = '';
-                        } else {
-                            $thisCategoryName = $thisCategoryNameArray['categoryName'];
-                        }
+                        $thisCategoryName = get_category_name($thisCategoryId);
                     ?>
                         <li class="list-group-item">
                             <div class="row">

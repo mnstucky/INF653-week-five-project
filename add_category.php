@@ -1,15 +1,9 @@
 <?php
 
-require_once('db_connect.php');
+include('./model/category_db.php');
 
 $new_category_name = filter_input(INPUT_POST, 'new_category_name');
-
-$insertCategoryQuery = 'INSERT INTO categories (categoryName)
-                VALUES (:new_category_name)';     
-$insertCategoryStatement = $db->prepare($insertCategoryQuery);
-$insertCategoryStatement->bindValue(':new_category_name', $new_category_name);
-$insertCategoryStatement->execute();
-$insertCategoryStatement->closeCursor();
+add_category($new_category_name);
 
 unset($_POST);
 header( "Location: edit_categories.php", true, 303 );

@@ -1,15 +1,10 @@
 <?php
 
-require_once('db_connect.php');
+require('./model/item_db.php');
 
 $delete_todo_itemnum = filter_input(INPUT_POST, 'todo_itemnum');
 
-$deleteTodoQuery = 'DELETE FROM todoitems
-                WHERE itemnum = :delete_todo_itemnum';     
-$deleteTodoStatement = $db->prepare($deleteTodoQuery);
-$deleteTodoStatement->bindValue(':delete_todo_itemnum', $delete_todo_itemnum);
-$deleteTodoStatement->execute();
-$deleteTodoStatement->closeCursor();
+delete_todo($delete_todo_itemnum);
 
 unset($_POST);
 header( "Location: index.php", true, 303 );

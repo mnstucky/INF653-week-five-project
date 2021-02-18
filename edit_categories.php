@@ -1,5 +1,5 @@
 <?php
-require_once('db_connect.php');
+require_once('./model/db_connect.php');
 
 $queryAllCategories = 'SELECT * FROM categories ORDER BY categoryID';
 $getCategoriesStatement = $db->prepare($queryAllCategories);
