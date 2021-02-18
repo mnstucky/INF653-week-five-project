@@ -81,6 +81,15 @@ $getCategoriesStatement->closeCursor();
             <?php if (empty($todos)) { ?>
                 <p>Sorry. No todo list items exist yet.</p>
             <?php } else { ?>
+                <div class="row ms-2 me-2 mb-0">
+                    <div class="col d-flex justify-content-start">
+                        <p class="mb-1">Title &nbsp;</p>
+                        <p class="text-muted mb-1">Description</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="mb-1">Category</p>
+                    </div>
+                </div>
                 <ul class="list-group">
                     <?php foreach ($todos as $todo) {
                         $thisCategoryId = $todo['categoryID'];
@@ -89,7 +98,11 @@ $getCategoriesStatement->closeCursor();
                         $getCategoryNameStatement->bindValue(':categoryId', $thisCategoryId);
                         $getCategoryNameStatement->execute();
                         $thisCategoryNameArray = $getCategoryNameStatement->fetch();
-                        $thisCategoryName = $thisCategoryNameArray['categoryName'];
+                        if ($thisCategoryNameArray === FALSE || $thisCategoryNameArray === NULL) {
+                            $thisCategoryName = '';
+                        } else {
+                            $thisCategoryName = $thisCategoryNameArray['categoryName'];
+                        }
                     ?>
                         <li class="list-group-item">
                             <div class="row">
@@ -128,6 +141,7 @@ $getCategoriesStatement->closeCursor();
                 <input class="form-control m-1" type="text" name="new_todo_description" placeholder="Description">
                 <button class="btn btn-primary m-1">Add Item</button>
             </form>
+            <a href="edit_categories.php">View/Edit Categories</a>
         </section>
     </main>
 
