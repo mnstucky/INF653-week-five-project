@@ -22,6 +22,17 @@ function get_todos_by_category($categoryId)
     }
 }
 
+function get_todo($itemNum) {
+    global $db;
+    $queryTodo = 'SELECT * FROM todoitems WHERE itemnum = :itemNum';
+    $getTodoStatement = $db->prepare($queryTodo);
+    $getTodoStatement->bindValue(':itemNum', $itemNum);
+    $getTodoStatement->execute();
+    $todo = $getTodoStatement->fetch();
+    $getTodoStatement->closeCursor();
+    return $todo;
+}
+
 function delete_todo($itemnum)
 {
     global $db;
