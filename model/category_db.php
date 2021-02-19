@@ -21,7 +21,7 @@ function get_category_name($categoryId)
     $getCategoryNameStatement->execute();
     $thisCategoryNameArray = $getCategoryNameStatement->fetch();
     if ($thisCategoryNameArray === FALSE || $thisCategoryNameArray === NULL) {
-        $thisCategoryName = '';
+        $thisCategoryName = 'None';
     } else {
         $thisCategoryName = $thisCategoryNameArray['categoryName'];
     }
